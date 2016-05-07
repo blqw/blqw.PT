@@ -6,16 +6,15 @@
   <MessageClass Name="Error" Label="错误" Option="显示错误" />
   <MessageClass Name="Property" Label="属性" Option="显示元数据" />
   <MessageClass Name="Diagnostic" Label="消息" Option="显示诊断消息" />
-  <Message Timestamp="2016-05-05T23:11:27" Importance="High" Text="已启动代码生成或文本转换。" />
-  <Message Timestamp="2016-05-05T23:11:27" Importance="Diagnostic" Text="名称 = InterfaceTemplate" />
-  <Message Timestamp="2016-05-05T23:11:27" Importance="Diagnostic" Text="覆盖 = True" />
-  <Message Timestamp="2016-05-05T23:11:27" Importance="Diagnostic" Text="ProjectPath = ..\blqw.PT\blqw.PT.csproj" />
-  <Message Timestamp="2016-05-05T23:11:27" Importance="Diagnostic" Text="TargetDirectory = GeneratedCode\{PackageStructure}" />
-  <Message Timestamp="2016-05-05T23:11:27" Importance="Diagnostic" Text="TargetName = {Name}" />
-  <Message Timestamp="2016-05-05T23:11:27" Importance="Diagnostic" Text="TemplateFilePath = C:\PROGRAM FILES (X86)\MICROSOFT VISUAL STUDIO 14.0\COMMON7\IDE\EXTENSIONS\MICROSOFT\ARCHITECTURE TOOLS\EXTENSIBILITY\Templates\Text\InterfaceTemplate.t4" />
-  <Message Timestamp="2016-05-05T23:11:27" Importance="Diagnostic" Text="ResolvedTemplateFilePath = C:\PROGRAM FILES (X86)\MICROSOFT VISUAL STUDIO 14.0\COMMON7\IDE\EXTENSIONS\MICROSOFT\ARCHITECTURE TOOLS\EXTENSIBILITY\Templates\Text\InterfaceTemplate.t4" />
-  <Message Timestamp="2016-05-05T23:11:27" Importance="Medium" Text="UML 的文本模板绑定: “InterfaceTemplate”会将 InterfaceTemplate.t4 应用于: “UML::ITester”- (Interface), “UML::IWorker”- (Interface) " />
-  <Message Timestamp="2016-05-05T23:11:27" Importance="Medium" Text="“UML::ITester”- (Interface) : 成功(已创建文件) - C:\Users\blqw\Source\Repos\blqw.PT\blqw.PT\GeneratedCode\ITester.cs" />
-  <Message Timestamp="2016-05-05T23:11:28" Importance="Medium" Text="“UML::IWorker”- (Interface) : 成功(已创建文件) - C:\Users\blqw\Source\Repos\blqw.PT\blqw.PT\GeneratedCode\IWorker.cs" />
-  <Message Timestamp="2016-05-05T23:11:28" Importance="High" Text="代码生成完成。错误: 0。警告: 0。" />
+  <Message Timestamp="2016-05-08T00:30:57" Importance="High" Text="已启动代码生成或文本转换。" />
+  <Message Timestamp="2016-05-08T00:30:57" Importance="Diagnostic" Text="名称 = InterfaceTemplate" />
+  <Message Timestamp="2016-05-08T00:30:57" Importance="Diagnostic" Text="覆盖 = True" />
+  <Message Timestamp="2016-05-08T00:30:57" Importance="Diagnostic" Text="ProjectPath = ..\blqw.PT\blqw.PT.csproj" />
+  <Message Timestamp="2016-05-08T00:30:57" Importance="Diagnostic" Text="TargetDirectory = GeneratedCode\{PackageStructure}" />
+  <Message Timestamp="2016-05-08T00:30:57" Importance="Diagnostic" Text="TargetName = {Name}" />
+  <Message Timestamp="2016-05-08T00:30:57" Importance="Diagnostic" Text="TemplateFilePath = C:\PROGRAM FILES (X86)\MICROSOFT VISUAL STUDIO 14.0\COMMON7\IDE\EXTENSIONS\MICROSOFT\ARCHITECTURE TOOLS\EXTENSIBILITY\Templates\Text\InterfaceTemplate.t4" />
+  <Message Timestamp="2016-05-08T00:30:57" Importance="Diagnostic" Text="ResolvedTemplateFilePath = C:\PROGRAM FILES (X86)\MICROSOFT VISUAL STUDIO 14.0\COMMON7\IDE\EXTENSIONS\MICROSOFT\ARCHITECTURE TOOLS\EXTENSIBILITY\Templates\Text\InterfaceTemplate.t4" />
+  <Message Timestamp="2016-05-08T00:30:57" Importance="Medium" Text="UML 的文本模板绑定: “InterfaceTemplate”会将 InterfaceTemplate.t4 应用于: “UML::blqw.PT::ITestResult”- (Interface) " />
+  <Message Timestamp="2016-05-08T00:30:57" Importance="Medium" Text="“UML::blqw.PT::ITestResult”- (Interface) : 成功(已替换文件) - C:\Users\blqw\Source\Repos\blqw.PT\blqw.PT\GeneratedCode\blqw.PT\ITestResult.cs" />
+  <Message Timestamp="2016-05-08T00:30:57" Importance="High" Text="代码生成完成。错误: 0。警告: 0。" />
 </Log>

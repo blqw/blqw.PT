@@ -40,8 +40,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\ProfilerCollection.cs" />
+    <Compile Include="Core\TestingException.cs" />
+    <Compile Include="Core\TestResult.cs" />
+    <Compile Include="EventHandler\Fail.cs" />
+    <Compile Include="EventHandler\Succeed.cs" />
+    <Compile Include="Interfaces\ITestResult.cs" />
+    <Compile Include="Interfaces\IProfilerCollection.cs" />
+    <Compile Include="Interfaces\ITester.cs" />
+    <Compile Include="Interfaces\ITestProfiler.cs" />
+    <Compile Include="Interfaces\ITestWorker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tester\ParallelTester.cs" />
+    <Compile Include="Tester\TaskTester.cs" />
+    <Compile Include="Tester\TesterBase.cs" />
+    <Compile Include="Tester\ThreadPoolTester.cs" />
+    <Compile Include="Tester\ThreadTester.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
