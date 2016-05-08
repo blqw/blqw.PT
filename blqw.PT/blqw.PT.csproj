@@ -43,6 +43,7 @@
     <Compile Include="Core\ProfilerCollection.cs" />
     <Compile Include="Core\TestingException.cs" />
     <Compile Include="Core\TestResult.cs" />
+    <Compile Include="Core\WorkerProperty.cs" />
     <Compile Include="EventHandler\Fail.cs" />
     <Compile Include="EventHandler\Succeed.cs" />
     <Compile Include="Interfaces\ITestResult.cs" />
@@ -50,12 +51,17 @@
     <Compile Include="Interfaces\ITester.cs" />
     <Compile Include="Interfaces\ITestProfiler.cs" />
     <Compile Include="Interfaces\ITestWorker.cs" />
+    <Compile Include="Profilers\ResponseTimeProfiler.cs" />
+    <Compile Include="Profilers\ProfilerBase.cs" />
+    <Compile Include="Profilers\TPSProfiler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tester\ParallelTester.cs" />
     <Compile Include="Tester\TaskTester.cs" />
     <Compile Include="Tester\TesterBase.cs" />
     <Compile Include="Tester\ThreadPoolTester.cs" />
     <Compile Include="Tester\ThreadTester.cs" />
+    <Compile Include="Workers\HttpWorker.cs" />
+    <Compile Include="Workers\WorkerBase.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

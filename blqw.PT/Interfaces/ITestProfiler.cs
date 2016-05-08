@@ -6,26 +6,52 @@
 //------------------------------------------------------------------------------
 namespace blqw.PT
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-	using System.Text;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
 
-	/// <summary>
-	/// 测试分析器
-	/// </summary>
-	/// <remarks>负责分析记录各种数值</remarks>
-	public interface ITestProfiler 
-	{
-		ITestResult TestResult { get;set; }
+    /// <summary>
+    /// 测试分析器
+    /// </summary>
+    /// <remarks>负责分析记录各种数值</remarks>
+    public interface ITestProfiler:IDisposable
+    {
+        /// <summary>
+        /// 分析器名称
+        /// </summary>
+        string Name { get; }
 
-		string Value { get;set; }
+        /// <summary>
+        /// 测试结果
+        /// </summary>
+        ITestResult TestResult { get; }
 
-		/// <summary>
-		/// 分析器的刷新时间
-		/// </summary>
-		TimeSpan Interval { get;set; }
+        /// <summary>
+        /// 开启分析器
+        /// </summary>
+        /// <param name="result"></param>
+        void Start(ITestResult result);
 
-	}
+        /// <summary>
+        /// 停止分析器
+        /// </summary>
+        void Stop();
+
+        /// <summary>
+        /// 分析器的当前值
+        /// </summary>
+        string Value { get;}
+
+        /// <summary>
+        /// 分析器的刷新时间
+        /// </summary>
+        TimeSpan Interval { get; set; }
+
+        /// <summary>
+        /// 值改变事件
+        /// </summary>
+        event EventHandler ValueChanged;
+    }
 }
 

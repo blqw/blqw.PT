@@ -16,7 +16,7 @@ namespace blqw.PT
         }
 
         public virtual bool Equally { get; set; }
-        public virtual IProfilerCollection Profilers { get; set; }
+        public virtual IProfilerCollection Profilers { get; set; } = new ProfilerCollection();
         public virtual int TestingCount { get; set; }
         public virtual TimeSpan TestingDelay { get; set; }
         public virtual int ThreadCount { get; set; }
@@ -31,16 +31,30 @@ namespace blqw.PT
             {
                 throw new ArgumentNullException(nameof(Worker));
             }
+            if (count <= 0)
+            {
+                WriteLine("跳过预热阶段");
+                return;
+            }
+            WriteLine($"正在进行{count}次预热");
             OnInitialize(worker);
             for (int i = 0; i < count; i++)
             {
+                if (count > 1)
+                {
+                    WriteLine($"第{i+1}次预热");
+                }
+                var sw = Stopwatch.StartNew();
                 var ex = worker.Testing();
+                sw.Stop();
                 if (ex != null)
                 {
                     throw new TestingException("测试预热出现异常", ex);
                 }
+                WriteLine($"耗时: {sw.Elapsed.TotalMilliseconds.ToString("f2")} ms");
             }
             OnCleanup(worker);
+            WriteLine("预热完成!");
         }
 
         public virtual ITestResult Run()
@@ -50,34 +64,62 @@ namespace blqw.PT
             {
                 throw new ArgumentNullException(nameof(Worker));
             }
+            var v = Interlocked.CompareExchange(ref _isrunning, 1, 0);
+            if (v != 0)
+            {
+                throw new TestingException("正在进行测试");
+            }
             OnStart();
-            var result = Result = new TestResult();
+            var result = _Result = new TestResult();
+            Profilers.Start(_Result);
+            WriteLine($"分析器启动完成...");
             OnInitialize(worker);
             OnCleanup(worker);
-            OnTesting(threadCount, worker);
+            WriteLine("异常检查完成...");
+            WriteLine("开始启动线程...");
+            new Thread(() =>
+            {
+                Thread.Sleep(1);
+                while (_activeThreads < _threadCount)
+                {
+                    WriteLine($"已启动线程:{_activeThreads}/{_threadCount}");
+                    Thread.Sleep(500);
+                }
+                WriteLine($"已启动线程:{_activeThreads}/{_threadCount}");
+                if (Interlocked.CompareExchange(ref _isrunning, 2, 1) == 1)
+                {
+                    WriteLine("线程启动完毕,开始测试...");
+                    result.Start();
+                }
+                else
+                {
+                    WriteLine("测试被中断...");
+                }
+            }).Start();
+            OnTesting(_threadCount, worker);
             OnEnd();
             return result;
         }
-
-        int isrunning;
-        int tastingCount;
-        int undone;
-        int threadCount;
-        int activeTesting;
-        bool iscancel;
-        TimeSpan delay;
-        int eachmax;
-        TestResult Result;
+        // 0:未启动 1准备中 2正在运行
+        int _isrunning;
+        int _tastingCount;
+        int _undone;
+        int _threadCount;
+        int _activeThreads;
+        bool _iscancel;
+        TimeSpan _delay;
+        int _eachmax;
+        TestResult _Result;
 
         public bool IsCompleted
         {
             get
             {
-                if (Result.Completed >= tastingCount)
+                if (_Result.Completed >= _tastingCount)
                 {
                     return true;
                 }
-                else if (iscancel && activeTesting == 0)
+                else if (_iscancel && _activeThreads == 0)
                 {
                     return true;
                 }
@@ -85,30 +127,32 @@ namespace blqw.PT
             }
         }
 
+        public int ActiveThreads
+        {
+            get
+            {
+                return _activeThreads;
+            }
+        }
+
         private void OnStart()
         {
-            var v = Interlocked.CompareExchange(ref isrunning, 1, 0);
-            if (v == 1)
-            {
-                throw new TestingException("正在进行测试");
-            }
-            iscancel = false;
-            tastingCount = TestingCount;
-            undone = tastingCount;
-            delay = TestingDelay;
-            threadCount = ThreadCount;
-            eachmax = undone;
+            _iscancel = false;
+            _tastingCount = TestingCount;
+            _undone = _tastingCount;
+            _delay = TestingDelay;
+            _threadCount = ThreadCount;
+            _eachmax = _undone;
             if (Equally)
             {
-                eachmax = (undone + (threadCount - 1)) / threadCount;
+                _eachmax = (_undone + (_threadCount - 1)) / _threadCount;
             }
             WriteLine("当前测试规则:");
-            WriteLine($"线程数:{threadCount}");
-            WriteLine($"测试任务总数:{undone}");
-            WriteLine($"单线程最多执行任务数:{eachmax}");
-            WriteLine($"两次任务执行延迟:{delay.TotalMilliseconds} ms");
+            WriteLine($"线程数:{_threadCount}");
+            WriteLine($"测试任务总数:{_undone}");
+            WriteLine($"单线程最多执行任务数:{_eachmax}");
+            WriteLine($"两次任务执行延迟:{_delay.TotalMilliseconds} ms");
             WriteLine($"测试提供程序:{this.ToString()}");
-            Profilers.Start(Result);
         }
 
         private void OnEnd()
@@ -117,7 +161,8 @@ namespace blqw.PT
             {
                 Thread.Sleep(100);
             }
-            isrunning = 0;
+            _Result?.Stop();
+            Interlocked.Exchange(ref _isrunning, 0);
             WriteLine("测试报告");
             foreach (var profiler in Profilers)
             {
@@ -158,40 +203,60 @@ namespace blqw.PT
 
         protected void OnTesting(ITestWorker worker)
         {
-            Interlocked.Increment(ref activeTesting);
+            Interlocked.Increment(ref _activeThreads);
+            while (true)
+            {
+                switch (Thread.VolatileRead(ref _isrunning))
+                {
+                    case 0:
+                        return;
+                    case 1:
+                        Thread.Sleep(5);
+                        continue;
+                    case 2:
+                        break;
+                    default:
+                        throw new NotSupportedException();
+                }
+                break;
+            }
             worker = worker.CreateNew();
             OnInitialize(worker);
             var sw = new Stopwatch();
-            for (int i = 0; i < eachmax; i++)
+            for (int i = 0; i < _eachmax; i++)
             {
-                if (iscancel)
+                if (_iscancel)
                 {
                     break;
                 }
-                var work = Interlocked.Decrement(ref undone);
-                if (work <= 0)
+                var work = Interlocked.Decrement(ref _undone);
+                if (work < 0)
                 {
                     break;
                 }
                 try
                 {
-                    sw.Start();
+                    sw.Restart();
                     var ex = worker.Testing();
                     sw.Stop();
-                    Result.AddSucceed(sw.Elapsed);
+                    _Result.AddSucceed(sw.Elapsed);
                 }
                 catch (Exception ex)
                 {
-                    Result.AddFail(ex);
+                    _Result.AddFail(ex);
+                }
+                if (_delay > TimeSpan.Zero)
+                {
+                    Thread.Sleep(_delay);
                 }
             }
             OnCleanup(worker);
-            Interlocked.Decrement(ref activeTesting);
+            Interlocked.Decrement(ref _activeThreads);
         }
 
         public void Cancel(bool async = false)
         {
-            iscancel = true;
+            _iscancel = true;
             if (async == false)
             {
                 while (IsCompleted)

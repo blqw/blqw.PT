@@ -6,36 +6,41 @@
 //------------------------------------------------------------------------------
 namespace blqw.PT
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-	using System.Text;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
 
-	/// <summary>
-	/// 测试任务接口
-	/// </summary>
-	/// <remarks>测试任务执行者</remarks>
-	public interface ITestWorker 
-	{
-		/// <summary>
-		/// 测试所需的属性
-		/// </summary>
-		Dictionary<string,object> Properties { get;set; }
+    /// <summary>
+    /// 测试任务接口
+    /// </summary>
+    /// <remarks>测试任务执行者</remarks>
+    public interface ITestWorker
+    {
+        /// <summary>
+        /// 设置或获取当前任务指定属性的值
+        /// </summary>
+        string this[string name] { get; set; }
 
-		/// <summary>
-		/// 测试前初始化的操作
-		/// </summary>
-		void Initialize();
+        /// <summary>
+        /// 当前测试任务属性描述
+        /// </summary>
+        IEnumerable<WorkerProperty> GetProperties();
 
-		/// <summary>
-		/// 执行测试
-		/// </summary>
-		Exception Testing();
+        /// <summary>
+        /// 测试前初始化的操作
+        /// </summary>
+        void Initialize();
 
-		/// <summary>
-		/// 测试后释放资源
-		/// </summary>
-		void Cleanup();
+        /// <summary>
+        /// 执行测试
+        /// </summary>
+        Exception Testing();
+
+        /// <summary>
+        /// 测试后释放资源
+        /// </summary>
+        void Cleanup();
 
         /// <summary>
         /// 创建一个新的测试对象

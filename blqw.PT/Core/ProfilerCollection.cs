@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace blqw.PT
 {
-    public sealed class ProfilerCollection :  IProfilerCollection
+    public sealed class ProfilerCollection : IProfilerCollection
     {
         List<ITestProfiler> _list = new List<ITestProfiler>();
 
@@ -32,7 +32,7 @@ namespace blqw.PT
             {
                 for (int i = 0; i < _list.Count; i++)
                 {
-                    _list[i].TestResult = result;
+                    _list[i].Start(result);
                 }
             }
         }
@@ -43,7 +43,7 @@ namespace blqw.PT
             {
                 for (int i = 0; i < _list.Count; i++)
                 {
-                    _list[i].TestResult = null;
+                    _list[i].Stop();
                 }
             }
         }
