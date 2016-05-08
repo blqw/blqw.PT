@@ -16,7 +16,7 @@ namespace blqw.PT.Profilers
         {
             get
             {
-                return "每秒事务(TPS)分析器:";
+                return "每秒事务(TPS)分析器";
             }
         }
 

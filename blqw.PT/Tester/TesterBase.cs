@@ -169,7 +169,7 @@ namespace blqw.PT
                 var s = profiler.Value;
                 if (string.IsNullOrWhiteSpace(s) == false)
                 {
-                    Console.WriteLine(s);
+                    Console.WriteLine($"{profiler.Name} : {s}");
                 }
             }
             Profilers.Stop();

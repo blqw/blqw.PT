@@ -51,6 +51,7 @@
     <Compile Include="Interfaces\ITester.cs" />
     <Compile Include="Interfaces\ITestProfiler.cs" />
     <Compile Include="Interfaces\ITestWorker.cs" />
+    <Compile Include="Profilers\ErrorProfiler.cs" />
     <Compile Include="Profilers\ResponseTimeProfiler.cs" />
     <Compile Include="Profilers\ProfilerBase.cs" />
     <Compile Include="Profilers\TPSProfiler.cs" />

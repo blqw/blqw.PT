@@ -27,7 +27,7 @@ namespace blqw.PT.Profilers
         {
             get
             {
-                return "响应时间分析器:";
+                return "响应时间分析器";
             }
         }
 

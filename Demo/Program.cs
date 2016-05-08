@@ -16,19 +16,21 @@ namespace Demo
             var tester = new ThreadTester();
             var worker = new HttpWorker();
             worker.URL = "http://static.apitops.com/kk.js";
+            worker.Timeout = 1000;
             tester.Worker = worker;
             var profiler = new TPSProfiler();
             tester.Profilers.Add(profiler);
             tester.Profilers.Add(new ResponseTimeProfiler());
+            tester.Profilers.Add(new ErrorProfiler());
 
             tester.Profilers.SetInterval(new TimeSpan(0, 0,0,0,500));
             profiler.ValueChanged += Profiler_ValueChanged;
             var w = worker.CreateNew();
 
             tester.Output = Console.Out;
-            tester.TestingCount = 500;
-            tester.TestingDelay = new TimeSpan(0, 0, 1);
-            tester.ThreadCount = 50;
+            tester.TestingCount = 1000;
+            tester.TestingDelay = new TimeSpan(0, 0, 0);
+            tester.ThreadCount = 200;
             tester.Equally = false;
 
             tester.Preheat(3);
