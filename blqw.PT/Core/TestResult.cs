@@ -107,7 +107,6 @@ namespace blqw.PT
 
                 }
             }
-            Console.WriteLine();
         }
 
         public void Stop()

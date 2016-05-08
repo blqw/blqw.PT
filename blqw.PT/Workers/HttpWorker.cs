@@ -11,6 +11,7 @@ namespace blqw.PT.Workers
     {
         public HttpWorker()
         {
+            System.Net.ServicePointManager.DefaultConnectionLimit = int.MaxValue;
             AddProperty("URL", "需要测试的超链接地址,需要带 http://");
             AddProperty("KeepAlive", "(true/false) 是否设置请求头 Connection=KeepAlive");
             AddProperty("Timeout", "设置请求的超时时间");
@@ -75,23 +76,40 @@ namespace blqw.PT.Workers
 
         public override Exception Testing()
         {
-            var www = (HttpWebRequest)WebRequest.Create(url);
-
-            www.Timeout = timeout;
-            www.KeepAlive = keep;
-            using (var resp = (HttpWebResponse)www.GetResponse())
+            Exception err = null;
+            for (int i = 0; i < 3; i++)
             {
-                if (resp.StatusCode != HttpStatusCode.OK
-                    && resp.StatusCode != HttpStatusCode.Redirect)
+                try
                 {
-                    throw new HttpListenerException((int)resp.StatusCode, $"响应状态为:{(int)resp.StatusCode}{resp.StatusCode.ToString()}");
-                }
-                using (var stream = resp.GetResponseStream())
-                {
+                    var www = (HttpWebRequest)WebRequest.Create(url);
 
+                    www.Timeout = timeout;
+                    www.KeepAlive = keep;
+                    using (var resp = (HttpWebResponse)www.GetResponse())
+                    {
+                        if (resp.StatusCode != HttpStatusCode.OK
+                            && resp.StatusCode != HttpStatusCode.Redirect)
+                        {
+                            throw new HttpListenerException((int)resp.StatusCode, $"响应状态为:{(int)resp.StatusCode}{resp.StatusCode.ToString()}");
+                        }
+                        using (var stream = resp.GetResponseStream())
+                        {
+
+                        }
+                    }
+                    return null;
+                }
+                catch (WebException ex)
+                when(ex.Status == WebExceptionStatus.KeepAliveFailure)
+                {
+                    err = ex;
+                }
+                catch (Exception ex)
+                {
+                    return ex;
                 }
             }
-            return null;
+            return err;
         }
     }
 }

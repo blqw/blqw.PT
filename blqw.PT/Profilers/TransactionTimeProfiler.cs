@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 namespace blqw.PT.Profilers
 {
     /// <summary>
-    /// 响应时间分析器
+    /// 事务时间分析器
     /// </summary>
-    public sealed class ResponseTimeProfiler : ProfilerBase
+    public sealed class TransactionTimeProfiler : ProfilerBase
     {
         long _ticks;
         long _max;
@@ -27,7 +27,7 @@ namespace blqw.PT.Profilers
         {
             get
             {
-                return "响应时间分析器";
+                return "事务时间分析器";
             }
         }
 
@@ -37,7 +37,7 @@ namespace blqw.PT.Profilers
             _max = Math.Max(_max, args.OnceElapsed.Ticks);
             _min = Math.Min(_min, args.OnceElapsed.Ticks);
             var elapsed = new TimeSpan(_ticks);
-            Value = $"成功请求数: {args.Succeeded}; 总响应时间: {(int)new TimeSpan(_ticks).TotalMilliseconds} ms; 平均响应时间: {elapsed.TotalMilliseconds / args.Succeeded} ms; 最大响应时间 {(int)new TimeSpan(_max).TotalMilliseconds} ms; 最小响应时间 {(int)new TimeSpan(_min).TotalMilliseconds}ms";
+            Value = $"成功事务数: {args.Succeeded}; 总事务时间: {(int)new TimeSpan(_ticks).TotalMilliseconds} ms; 平均事务时间: {elapsed.TotalMilliseconds / args.Succeeded} ms; 最大事务时间 {(int)new TimeSpan(_max).TotalMilliseconds} ms; 最小事务时间 {(int)new TimeSpan(_min).TotalMilliseconds}ms";
         }
 
         public override void Start(ITestResult result)
